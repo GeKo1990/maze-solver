@@ -1,28 +1,9 @@
 from window import Window
-from cell import Cell
+from maze import Maze
 
 if __name__ == "__main__":
     window = Window(800, 600)
 
-    # Create a list to hold the cells
-    cells = []
-
-    # Create cells with a size of 50 pixels
-    cell_size = 50
-    for i in range(5):
-        for j in range(5):
-            x1 = i * cell_size
-            y1 = j * cell_size
-            x2 = x1 + cell_size
-            y2 = y1 + cell_size
-            cell = Cell(x1, x2, y1, y2, window)
-            cells.append(cell)
-
-    # Draw all the cells
-    for cell in cells:
-        cell.draw()
-    
-    cells[0].draw_move(cells[1])
-    cells[1].draw_move(cells[2], True)
+    maze = Maze(0, 0, 12, 16, 50, 50, window)
 
     window.wait_for_close()

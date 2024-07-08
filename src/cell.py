@@ -5,7 +5,7 @@ from point import Point
 from line import Line
 
 class Cell:
-    def __init__(self, x1: int, x2: int, y1: int, y2: int, window: Window):
+    def __init__(self, x1: int, x2: int, y1: int, y2: int, window: Window = None):
         self.has_left_wall = True
         self.has_right_wall = True
         self.has_top_wall = True
