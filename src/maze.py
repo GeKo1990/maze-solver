@@ -31,9 +31,9 @@ class Maze:
                 cell.draw()
             self._cells.append(row)            
 
-        self._animate()
+        #self._animate()
 
     def _animate(self):
-        while(1):
+        while(self._win):
             self._win.redraw()
             time.sleep(0.05)

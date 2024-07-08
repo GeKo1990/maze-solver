@@ -22,6 +22,9 @@ class Cell:
         bottom_left = Point(self._x1, self._y2)
         bottom_right = Point(self._x2, self._y2)
 
+        if not self._win:
+            return
+
         if self.has_left_wall:
             self._win.draw_line(Line(top_left, bottom_left), "black")
         if self.has_top_wall:
