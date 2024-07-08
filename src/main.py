@@ -15,11 +15,14 @@ if __name__ == "__main__":
             y1 = j * cell_size
             x2 = x1 + cell_size
             y2 = y1 + cell_size
-            cell = Cell(x1, y1, x2, y2, window)
+            cell = Cell(x1, x2, y1, y2, window)
             cells.append(cell)
 
     # Draw all the cells
     for cell in cells:
         cell.draw()
+    
+    cells[0].draw_move(cells[1])
+    cells[1].draw_move(cells[2], True)
 
     window.wait_for_close()

@@ -1,3 +1,5 @@
+import math
+
 from window import Window
 from point import Point
 from line import Line
@@ -28,3 +30,17 @@ class Cell:
             self._win.draw_line(Line(top_right, bottom_right), "black")
         if self.has_bottom_wall:
             self._win.draw_line(Line(bottom_left, bottom_right), "black")
+
+    def center(self):
+        center_x = (self._x1 + self._x2) / 2
+        center_y = (self._y1 + self._y2) / 2
+        return (center_x, center_y)
+
+    def draw_move(self, to_cell, undo=False):
+        color = "gray"
+        if not undo:
+            color = "red"
+        
+        start = Point(self.center()[0], self.center()[1])
+        end = Point(to_cell.center()[0], to_cell.center()[1])
+        self._win.draw_line(Line(start, end), color)
