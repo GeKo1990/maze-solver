@@ -17,6 +17,7 @@ class Maze:
         self._win = win
         self._cells = []
 
+        random.seed(1)
         self._create_cells()
 
     def _create_cells(self):
@@ -36,6 +37,7 @@ class Maze:
 
     def _animate(self):
         self._break_entrance_and_exit()
+        self._break_walls_r(0, 0)
         while(self._win):
             self._win.redraw()
             time.sleep(0.05)
@@ -55,3 +57,53 @@ class Maze:
         else:
             end.has_top_wall = False
         end.draw()
+
+    def _break_walls_r(self, x, y):
+        current_cell = self._cells[x][y]
+        current_cell.visited = True
+
+        while True:
+            possible_coords = []
+
+            for i in range(-1, 2):
+                for j in range(-1, 2):
+                    if (i == 0 and j != 0) or (i != 0 and j == 0):
+                        p_x = x + i
+                        p_y = y + j
+
+                        if 0 <= p_x < self._num_rows and 0 <= p_y < self._num_cols:
+                            possible_cell = self._cells[p_x][p_y]
+                            if not possible_cell.visited:
+                                if i == -1 and j == 0:
+                                    possible_coords.append((p_x, p_y, "left"))
+                                elif i == 1 and j == 0:
+                                    possible_coords.append((p_x, p_y, "right"))
+                                elif i == 0 and j == -1:
+                                    possible_coords.append((p_x, p_y, "up"))
+                                elif i == 0 and j == 1:
+                                    possible_coords.append((p_x, p_y, "down"))
+
+            if not possible_coords:
+                current_cell.draw()
+                return
+            else:
+                next_x, next_y, direction = random.choice(possible_coords)
+                next_cell = self._cells[next_x][next_y]
+
+                if direction == "left":
+                    current_cell.has_left_wall = False
+                    next_cell.has_right_wall = False
+                elif direction == "right":
+                    current_cell.has_right_wall = False
+                    next_cell.has_left_wall = False
+                elif direction == "up":
+                    current_cell.has_top_wall = False
+                    next_cell.has_bottom_wall = False
+                elif direction == "down":
+                    current_cell.has_bottom_wall = False
+                    next_cell.has_top_wall = False
+
+                current_cell.draw()
+                next_cell.draw()
+
+                self._break_walls_r(next_x, next_y)
