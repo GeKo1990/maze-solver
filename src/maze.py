@@ -16,6 +16,7 @@ class Maze:
         self._cell_size_y = cell_size_y
         self._win = win
         self._cells = []
+        self._end_cell = None
 
         if seed:
             random.seed(seed)
@@ -54,7 +55,7 @@ class Maze:
         if self._win is None:
             return
         self._win.redraw()
-        time.sleep(0.02)
+        time.sleep(0.005)
 
     def _break_entrance_and_exit(self):
         start = self._cells[0][0]
@@ -62,6 +63,7 @@ class Maze:
 
         start.has_top_wall = False
         end.has_bottom_wall = False
+        self._end_cell = end
         self._draw_cell(start)
         self._draw_cell(end)
 
@@ -108,3 +110,40 @@ class Maze:
                 next_cell.has_top_wall = False
 
             self._break_walls_r(next_x, next_y)
+
+    def solve(self):
+        return self._solve_r(0, 0)
+
+    def _solve_r(self, x, y):
+        self._animate()
+
+        current_cell = self._cells[x][y]
+        current_cell.visited = True
+
+        if current_cell == self._end_cell:
+            return True
+        
+        directions = [(0, -1, "top"), (1, 0, "right"), (0, 1, "bottom"), (-1, 0, "left")]
+
+        for i, j, direction in directions:
+            pos_x = x + i
+            pos_y = y + j
+            has_possible_cell = pos_x >= 0 and pos_x <= self._num_cols - 1 and pos_y >= 0 and pos_y <= self._num_rows
+            has_wall = getattr(current_cell, f"has_{direction}_wall")
+            
+            if has_possible_cell and not has_wall:
+                possible_cell = self._cells[pos_x][pos_y]
+                if not possible_cell.visited:
+                    current_cell.draw_move(possible_cell)
+                    if self._solve_r(pos_x, pos_y) == True:
+                        return True
+                    else:
+                        current_cell.draw_move(possible_cell, True)
+        
+        return False
+
+
+                
+
+            
+
