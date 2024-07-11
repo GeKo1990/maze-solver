@@ -23,6 +23,14 @@ class Maze:
         self._create_cells()
         self._break_entrance_and_exit()
         self._break_walls_r(0, 0)
+        self._reset_cells_visited()
+
+    def _reset_cells_visited(self):
+        for x in range(self._num_cols):
+            for y in range(self._num_rows):
+                cell = self._cells[x][y]
+                cell.visited = False
+
 
     def _create_cells(self):
         for col_idx in range(self._num_cols):
